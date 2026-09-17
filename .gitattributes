@@ -1,1 +1,0 @@
-sysroot/lib/modules/7.0.0/kernel/drivers/gpu/drm/amd/amdgpu/amdgpu.ko.zst filter=lfs diff=lfs merge=lfs -text

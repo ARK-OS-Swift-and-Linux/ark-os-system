@@ -1,0 +1,78 @@
+//
+// Copyright 2026 Aarav Ravindra Kharade
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+/* x86 internal mutex struct definitions.
+   Copyright (C) 2019-2026 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+#ifndef _THREAD_MUTEX_INTERNAL_H
+#define _THREAD_MUTEX_INTERNAL_H 1
+
+struct __pthread_mutex_s
+{
+  int __lock;
+  unsigned int __count;
+  int __owner;
+#ifdef __x86_64__
+  unsigned int __nusers;
+#endif
+  /* KIND must stay at this position in the structure to maintain
+     binary compatibility with static initializers.  */
+  int __kind;
+#ifdef __x86_64__
+  short __spins;
+  short __unused;
+  __pthread_list_t __list;
+# define __PTHREAD_MUTEX_HAVE_PREV      1
+#else
+  unsigned int __nusers;
+  __extension__ union
+  {
+    struct
+    {
+      short __data_spins;
+      short __data_unused;
+# define __spins __data.__data_spins
+    } __data;
+    __pthread_slist_t __list;
+  };
+# define __PTHREAD_MUTEX_HAVE_PREV      0
+#endif
+};
+
+#ifdef __x86_64__
+# define __PTHREAD_MUTEX_INITIALIZER(__kind) \
+  0, 0, 0, 0, __kind, 0, 0, { NULL, NULL }
+#else
+# define __PTHREAD_MUTEX_INITIALIZER(__kind) \
+  0, 0, 0, __kind, 0, { { 0, 0 } }
+#endif
+
+#endif

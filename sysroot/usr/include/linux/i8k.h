@@ -1,0 +1,66 @@
+//
+// Copyright 2026 Aarav Ravindra Kharade
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+/*
+ * i8k.h -- Linux driver for accessing the SMM BIOS on Dell laptops
+ *
+ * Copyright (C) 2001  Massimo Dal Zotto <dz@debian.org>
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2, or (at your option) any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ */
+
+#ifndef _LINUX_I8K_H
+#define _LINUX_I8K_H
+
+#define I8K_PROC		"/proc/i8k"
+#define I8K_PROC_FMT		"1.0"
+
+#define I8K_BIOS_VERSION	_IOR ('i', 0x80, int)	/* broken: meant 4 bytes */
+#define I8K_MACHINE_ID		_IOR ('i', 0x81, int)	/* broken: meant 16 bytes */
+#define I8K_POWER_STATUS	_IOR ('i', 0x82, size_t)
+#define I8K_FN_STATUS		_IOR ('i', 0x83, size_t)
+#define I8K_GET_TEMP		_IOR ('i', 0x84, size_t)
+#define I8K_GET_SPEED		_IOWR('i', 0x85, size_t)
+#define I8K_GET_FAN		_IOWR('i', 0x86, size_t)
+#define I8K_SET_FAN		_IOWR('i', 0x87, size_t)
+
+#define I8K_FAN_LEFT		1
+#define I8K_FAN_RIGHT		0
+#define I8K_FAN_OFF		0
+#define I8K_FAN_LOW		1
+#define I8K_FAN_HIGH		2
+#define I8K_FAN_TURBO		3
+/* Many machines treat this mode as some sort of automatic mode */
+#define I8K_FAN_AUTO		3
+#define I8K_FAN_MAX		I8K_FAN_TURBO
+
+#define I8K_VOL_UP		1
+#define I8K_VOL_DOWN		2
+#define I8K_VOL_MUTE		4
+
+#define I8K_AC			1
+#define I8K_BATTERY		0
+
+#endif
